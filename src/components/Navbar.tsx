@@ -51,6 +51,7 @@ export default function Navbar() {
     { href: "#coverage", label: t("เส้นทางทั่วไทย", "Coverage") },
     { href: "#fleet", label: t("ยานพาหนะ", "Fleet") },
     { href: "#tours", label: t("แพ็กเกจทัวร์", "Tour Packages") },
+    { href: "#gallery", label: t("แกลเลอรี", "Gallery") },
     { href: "#contact", label: t("ติดต่อเรา", "Contact") },
   ];
 

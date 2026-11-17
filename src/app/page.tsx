@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import ServiceCoverage from "@/components/ServiceCoverage";
 import Services from "@/components/Services";
 import TourPackages from "@/components/TourPackages";
+import TourGallery from "@/components/TourGallery";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <ServiceCoverage />
       <Fleet />
       <TourPackages />
+      <TourGallery />
       <BookingForm />
       <Contact />
       <Footer />

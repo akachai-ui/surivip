@@ -13,6 +13,7 @@ export default function Footer() {
     { href: "#coverage", label: t("เส้นทางทั่วไทย (Coverage)", "Service Coverage") },
     { href: "#fleet", label: t("ยานพาหนะ (Our Fleet)", "Premium Fleet") },
     { href: "#tours", label: t("แพ็กเกจทัวร์ (Tour Packages)", "Tour Packages") },
+    { href: "#gallery", label: t("แกลเลอรีภาพ (Gallery)", "Tour Gallery") },
     { href: "#contact", label: t("ติดต่อเรา (Contact Us)", "Contact Us") },
   ];
 

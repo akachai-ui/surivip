@@ -157,18 +157,18 @@ export default function BookingForm() {
               e.preventDefault();
               handleSendToLine();
             }}
-            className="rounded-3xl border border-gold/30 bg-white/[0.02] p-5 sm:p-8 backdrop-blur-sm shadow-2xl shadow-black/60"
+            className="rounded-3xl border border-gold/30 bg-white/[0.02] p-4 sm:p-8 backdrop-blur-sm shadow-2xl shadow-black/60 overflow-hidden w-full max-w-full"
           >
-            <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+            <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 min-w-0">
               {/* Service Type */}
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-2 min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   1. {t("เลือกประเภทบริการ", "Service Type")}
                 </label>
                 <select
                   value={formData.serviceType}
                   onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
                 >
                   {serviceOptions.map((opt) => {
                     const label = lang === "th" ? opt.th : opt.en;
@@ -182,7 +182,7 @@ export default function BookingForm() {
               </div>
 
               {/* Vehicle Selection */}
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-2 min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   2. {t("เลือกรถที่ต้องการ", "Vehicle Selection")}
                 </label>
@@ -210,7 +210,7 @@ export default function BookingForm() {
               </div>
 
               {/* Pickup Location */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   3. {t("จุดรับ", "Pick-up Location")}
                 </label>
@@ -219,12 +219,12 @@ export default function BookingForm() {
                   placeholder={t("เช่น สนามบินสุวรรณภูมิ / โรงแรม...", "e.g. Suvarnabhumi Airport / Hotel name...")}
                   value={formData.pickup}
                   onChange={(e) => setFormData({ ...formData, pickup: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
                 />
               </div>
 
               {/* Destination */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   4. {t("จุดหมายปลายทาง", "Destination")}
                 </label>
@@ -233,42 +233,46 @@ export default function BookingForm() {
                   placeholder={t("เช่น พัทยา / หัวหิน / โรงแรม...", "e.g. Pattaya / Hua Hin / Hotel name...")}
                   value={formData.destination}
                   onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
                 />
               </div>
 
-              {/* Date */}
-              <div>
+              {/* 5. Date (iOS Safari Overflow Protected) */}
+              <div className="min-w-0 w-full">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   5. {t("วันที่เดินทาง", "Date")}
                 </label>
-                <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold [color-scheme:dark]"
-                />
+                <div className="relative w-full min-w-0 overflow-hidden rounded-xl border border-gold/30 bg-black/60 transition-colors focus-within:border-gold focus-within:ring-1 focus-within:ring-gold">
+                  <input
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    className="block w-full min-w-0 max-w-full appearance-none border-0 bg-transparent px-3.5 py-3 text-sm text-foreground focus:outline-none [color-scheme:dark] box-border"
+                  />
+                </div>
               </div>
 
-              {/* Time */}
-              <div>
+              {/* 6. Time (iOS Safari Overflow Protected) */}
+              <div className="min-w-0 w-full">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   6. {t("เวลาที่ต้องการให้รับ", "Pick-up Time")}
                 </label>
-                <input
-                  type="time"
-                  value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold [color-scheme:dark]"
-                />
+                <div className="relative w-full min-w-0 overflow-hidden rounded-xl border border-gold/30 bg-black/60 transition-colors focus-within:border-gold focus-within:ring-1 focus-within:ring-gold">
+                  <input
+                    type="time"
+                    value={formData.time}
+                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                    className="block w-full min-w-0 max-w-full appearance-none border-0 bg-transparent px-3.5 py-3 text-sm text-foreground focus:outline-none [color-scheme:dark] box-border"
+                  />
+                </div>
               </div>
 
               {/* Passengers & Luggage */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   7. {t("จำนวนผู้โดยสาร", "Passengers")}
                 </label>
-                <div className="flex items-center rounded-xl border border-gold/30 bg-black/60 p-1">
+                <div className="flex items-center rounded-xl border border-gold/30 bg-black/60 p-1 min-w-0">
                   <button
                     type="button"
                     onClick={() =>
@@ -299,11 +303,11 @@ export default function BookingForm() {
                 </div>
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   8. {t("จำนวนสัมภาระ/กระเป๋า", "Luggage")}
                 </label>
-                <div className="flex items-center rounded-xl border border-gold/30 bg-black/60 p-1">
+                <div className="flex items-center rounded-xl border border-gold/30 bg-black/60 p-1 min-w-0">
                   <button
                     type="button"
                     onClick={() =>
@@ -335,7 +339,7 @@ export default function BookingForm() {
               </div>
 
               {/* Name */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   9. {t("ชื่อผู้ติดต่อ", "Contact Name")}
                 </label>
@@ -344,12 +348,12 @@ export default function BookingForm() {
                   placeholder={t("เช่น คุณสมชาย", "e.g. John Smith")}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
                 />
               </div>
 
               {/* Phone */}
-              <div>
+              <div className="min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   10. {t("เบอร์โทรศัพท์ / WhatsApp", "Phone / WhatsApp")}
                 </label>
@@ -358,12 +362,12 @@ export default function BookingForm() {
                   placeholder={t("เช่น 081-234-5678", "+66 ... / your country code")}
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold"
                 />
               </div>
 
               {/* Note */}
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-2 min-w-0">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   11. {t("หมายเหตุเพิ่มเติม / เที่ยวบิน", "Flight No. / Special Requests")}
                 </label>
@@ -372,7 +376,7 @@ export default function BookingForm() {
                   placeholder={t("เช่น เที่ยวบิน TG640 ถึงเวลา 13:30 น. ต้องการเก้าอี้เด็ก ฯลฯ", "e.g. Flight TG640 arrives 13:30, child car seat requested...")}
                   value={formData.note}
                   onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-                  className="w-full rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+                  className="w-full min-w-0 rounded-xl border border-gold/30 bg-black/60 px-4 py-3 text-sm text-foreground placeholder:text-foreground/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold resize-none"
                 />
               </div>
             </div>

@@ -160,6 +160,37 @@ html {
   touch-action: pan-x;
 }
 
+/* iOS Safari & WebKit Date/Time Input Overflow Fixes */
+input[type="date"],
+input[type="time"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  display: block;
+}
+
+/* Fix Safari internal date-and-time container alignment and sizing */
+input[type="date"]::-webkit-date-and-time-value,
+input[type="time"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.4em;
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Luxury Gold tint for calendar/clock picker icon */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(60%) saturate(1200%) hue-rotate(5deg);
+  cursor: pointer;
+  opacity: 0.85;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;

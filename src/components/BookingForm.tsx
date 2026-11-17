@@ -32,7 +32,7 @@ export default function BookingForm() {
   ];
 
   const vehicleOptions = [
-    { th: "Toyota Camry VIP (1-3 ท่าน)", en: "Toyota Camry VIP (1-3 Guests)" },
+    { th: "รถเก๋งซีดาน VIP / Camry (1-3 ท่าน)", en: "Executive Sedan / Camry (1-3 Guests)" },
     { th: "Luxury SUV 7 ที่นั่ง (1-5 ท่าน)", en: "Luxury SUV (1-5 Guests)" },
     { th: "VIP Van 10 ที่นั่ง (6-9 ท่าน)", en: "VIP Van (6-9 Guests)" },
   ];

@@ -9,11 +9,11 @@ export default function Fleet() {
 
   const fleet = [
     {
-      name: "Toyota Camry",
-      typeEn: "Executive VIP Sedan",
-      typeTh: "รถเก๋งผู้บริหาร VIP",
-      image: "/images/fleet/camry.jpg",
-      alt: "รถเก๋งผู้บริหาร Toyota Camry VIP สีดำ",
+      name: "Executive Sedan",
+      typeEn: "Toyota Camry / VIP Sedan",
+      typeTh: "รถเก๋งซีดาน VIP (Camry)",
+      image: "/images/fleet/sedan.jpg",
+      alt: "รถเก๋งซีดานผู้บริหาร VIP Toyota Camry สีดำ",
       seats: "4-5",
       passengersEn: "1-3 Guests",
       passengersTh: "1-3 ท่าน (กว้างขวาง)",

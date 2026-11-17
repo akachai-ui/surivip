@@ -9,16 +9,28 @@ export default function Fleet() {
 
   const fleet = [
     {
+      name: "Toyota Camry",
+      typeEn: "Executive VIP Sedan",
+      typeTh: "รถเก๋งผู้บริหาร VIP",
+      image: "/images/fleet/camry.jpg",
+      alt: "รถเก๋งผู้บริหาร Toyota Camry VIP สีดำ",
+      seats: "4-5",
+      passengersEn: "1-3 Guests",
+      passengersTh: "1-3 ท่าน (กว้างขวาง)",
+      bestForEn: ["Solo / Couples VIP", "Airport Transfer", "City & Business Trips"],
+      bestForTh: ["เดินทางเดี่ยว / คู่รัก VIP", "รับ-ส่งสนามบินส่วนตัว", "เดินทางในเมือง & งานธุรกิจ"],
+    },
+    {
       name: "Luxury SUV",
-      typeEn: "7-Seater SUV",
+      typeEn: "7-Seater Premium SUV",
       typeTh: "รถ SUV หรู 7 ที่นั่ง",
       image: "/images/fleet/suv.jpg",
       alt: "รถ SUV หรู 7 ที่นั่ง สีดำ",
       seats: "7",
       passengersEn: "Up to 4-5 Guests",
       passengersTh: "ไม่เกิน 4-5 ท่าน",
-      bestForEn: ["Couples / Small Families", "Airport Transfers", "Business Travel"],
-      bestForTh: ["คู่รัก / ครอบครัวเล็ก", "รับ-ส่งสนามบิน", "เดินทางธุรกิจ VIP"],
+      bestForEn: ["Couples / Small Families", "Airport Transfers", "Upcountry Travel"],
+      bestForTh: ["คู่รัก / ครอบครัวเล็ก", "รับ-ส่งสนามบิน", "เดินทางต่างจังหวัด"],
     },
     {
       name: "VIP Van",
@@ -29,18 +41,18 @@ export default function Fleet() {
       seats: "10",
       passengersEn: "6-9 Guests",
       passengersTh: "6-9 ท่าน",
-      bestForEn: ["Large Groups / Big Families", "Private Nationwide Tours", "Bulky Luggage"],
+      bestForEn: ["Large Groups / Big Families", "Nationwide Tours", "Bulky Luggage"],
       bestForTh: ["กลุ่มใหญ่ / ครอบครัวใหญ่", "ทัวร์ส่วนตัวทั่วไทย", "สัมภาระเยอะ กระเป๋าใหญ่"],
     },
   ];
 
   function Stat({ label, value }: { label: string; value: string }) {
     return (
-      <div className="flex-1 rounded-xl border border-gold/20 bg-black/30 px-4 py-3 text-center">
-        <p className="font-display text-2xl font-semibold leading-none text-gold-light sm:text-3xl">
+      <div className="flex-1 rounded-xl border border-gold/20 bg-black/30 px-3 py-2.5 text-center">
+        <p className="font-display text-xl font-semibold leading-none text-gold-light sm:text-2xl">
           {value}
         </p>
-        <p className="mt-1.5 text-[11px] uppercase tracking-widest text-foreground/50">{label}</p>
+        <p className="mt-1 text-[10px] uppercase tracking-wider text-foreground/50">{label}</p>
       </div>
     );
   }
@@ -77,86 +89,88 @@ export default function Fleet() {
           </p>
         </Reveal>
 
-        {/* Phones: side-by-side comparison table */}
+        {/* Phones: side-by-side comparison table (Smooth horizontal scrollable) */}
         <Reveal className="mt-10 md:hidden">
-          <div className="grid grid-cols-[4.5rem_1fr_1fr] gap-x-2">
-            <div />
-            {fleet.map((v) => (
-              <div key={v.name} className="text-center">
-                <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-gold/30">
-                  <Image
-                    src={v.image}
-                    alt={v.alt}
-                    fill
-                    sizes="40vw"
-                    className="object-cover"
-                  />
+          <div className="overflow-x-auto pb-3 scrollbar-none touch-smooth -mx-2 px-2 scroll-smooth">
+            <div className="grid grid-cols-[3.8rem_repeat(3,minmax(105px,1fr))] gap-x-2 min-w-[390px]">
+              <div />
+              {fleet.map((v) => (
+                <div key={v.name} className="text-center">
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-gold/30">
+                    <Image
+                      src={v.image}
+                      alt={v.alt}
+                      fill
+                      sizes="35vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <h3 className="mt-2 font-display text-base font-semibold leading-tight text-gold-light truncate">
+                    {v.name}
+                  </h3>
+                  <p className="text-[10px] text-foreground/50 truncate">{lang === "th" ? v.typeTh : v.typeEn}</p>
                 </div>
-                <h3 className="mt-2 font-display text-lg font-semibold leading-tight text-gold-light">
-                  {v.name}
-                </h3>
-                <p className="text-[10px] text-foreground/50">{lang === "th" ? v.typeTh : v.typeEn}</p>
+              ))}
+
+              <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[10px] uppercase tracking-wider text-foreground/50">
+                {t("ที่นั่ง", "Seats")}
               </div>
-            ))}
-
-            <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[11px] uppercase tracking-widest text-foreground/50">
-              {t("ที่นั่ง", "Seats")}
-            </div>
-            {fleet.map((v) => (
-              <div
-                key={v.name}
-                className="mt-3 flex items-center justify-center border-t border-gold/15 pt-3"
-              >
-                <span className="font-display text-2xl font-semibold text-gold-light">
-                  {v.seats}
-                </span>
-              </div>
-            ))}
-
-            <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[11px] uppercase tracking-widest text-foreground/50">
-              {t("ผู้โดยสาร", "Capacity")}
-            </div>
-            {fleet.map((v) => (
-              <div
-                key={v.name}
-                className="mt-3 flex items-center justify-center border-t border-gold/15 pt-3 text-center text-xs text-foreground/90 font-medium"
-              >
-                {lang === "th" ? v.passengersTh : v.passengersEn}
-              </div>
-            ))}
-
-            <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[11px] uppercase tracking-widest text-foreground/50">
-              {t("เหมาะสำหรับ", "Best For")}
-            </div>
-            {fleet.map((v) => {
-              const bestFor = lang === "th" ? v.bestForTh : v.bestForEn;
-              return (
-                <div key={v.name} className="mt-3 flex items-center border-t border-gold/15 pt-3">
-                  <ul className="space-y-1.5 text-xs text-foreground/75">
-                    {bestFor.map((b) => (
-                      <li key={b}>• {b}</li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-
-            <div />
-            {fleet.map((v) => (
-              <div key={v.name} className="mt-4">
-                <a
-                  href="#booking"
-                  className="flex h-11 items-center justify-center rounded-full border border-gold/60 text-[11px] font-semibold uppercase tracking-widest text-gold transition active:scale-95 active:bg-gold/10"
+              {fleet.map((v) => (
+                <div
+                  key={v.name}
+                  className="mt-3 flex items-center justify-center border-t border-gold/15 pt-3"
                 >
-                  {t("จองรถคันนี้", "Book Vehicle")}
-                </a>
+                  <span className="font-display text-xl font-semibold text-gold-light">
+                    {v.seats}
+                  </span>
+                </div>
+              ))}
+
+              <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[10px] uppercase tracking-wider text-foreground/50">
+                {t("ผู้โดยสาร", "Capacity")}
               </div>
-            ))}
+              {fleet.map((v) => (
+                <div
+                  key={v.name}
+                  className="mt-3 flex items-center justify-center border-t border-gold/15 pt-3 text-center text-[11px] text-foreground/90 font-medium"
+                >
+                  {lang === "th" ? v.passengersTh : v.passengersEn}
+                </div>
+              ))}
+
+              <div className="mt-3 flex items-center border-t border-gold/15 pt-3 text-[10px] uppercase tracking-wider text-foreground/50">
+                {t("เหมาะสำหรับ", "Best For")}
+              </div>
+              {fleet.map((v) => {
+                const bestFor = lang === "th" ? v.bestForTh : v.bestForEn;
+                return (
+                  <div key={v.name} className="mt-3 flex items-center border-t border-gold/15 pt-3">
+                    <ul className="space-y-1 text-[10px] text-foreground/75">
+                      {bestFor.map((b) => (
+                        <li key={b} className="leading-tight">• {b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+
+              <div />
+              {fleet.map((v) => (
+                <div key={v.name} className="mt-4">
+                  <a
+                    href="#booking"
+                    className="flex h-10 items-center justify-center rounded-full border border-gold/60 text-[10px] font-semibold uppercase tracking-wider text-gold transition active:scale-95 active:bg-gold/10"
+                  >
+                    {t("จองคันนี้", "Book")}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
 
-        {/* md and up: detailed cards */}
-        <ul className="mt-16 hidden gap-8 md:grid md:grid-cols-2">
+        {/* md and up: 3 detailed luxury cards */}
+        <ul className="mt-16 hidden gap-6 md:grid md:grid-cols-3">
           {fleet.map((v, i) => {
             const type = lang === "th" ? v.typeTh : v.typeEn;
             const passengers = lang === "th" ? v.passengersTh : v.passengersEn;
@@ -164,43 +178,43 @@ export default function Fleet() {
 
             return (
               <li key={v.name}>
-                <Reveal delay={i * 150} className="h-full">
+                <Reveal delay={i * 120} className="h-full">
                   <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-gold/25 bg-white/[0.03] transition duration-500 md:hover:-translate-y-2 md:hover:border-gold/60 md:hover:shadow-2xl md:hover:shadow-gold/10">
                     <div className="relative aspect-[3/2] overflow-hidden">
                       <Image
                         src={v.image}
                         alt={v.alt}
                         fill
-                        sizes="(min-width: 768px) 50vw, 100vw"
+                        sizes="(min-width: 768px) 33vw, 100vw"
                         className="object-cover transition duration-700 md:group-hover:scale-105"
                       />
                       <div
                         aria-hidden
                         className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"
                       />
-                      <span className="absolute left-4 top-4 rounded-full border border-gold/50 bg-black/50 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-gold backdrop-blur">
+                      <span className="absolute left-3 top-3 rounded-full border border-gold/50 bg-black/60 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold backdrop-blur">
                         {type}
                       </span>
                     </div>
 
-                    <div className="flex flex-1 flex-col p-5 sm:p-7">
-                      <h3 className="font-display text-3xl font-semibold text-gold-light sm:text-4xl">
+                    <div className="flex flex-1 flex-col p-5">
+                      <h3 className="font-display text-2xl font-semibold text-gold-light sm:text-3xl">
                         {v.name}
                       </h3>
-                      <p className="mt-1 text-sm uppercase tracking-widest text-foreground/50">
+                      <p className="mt-1 text-xs uppercase tracking-wider text-foreground/50">
                         {type}
                       </p>
 
-                      <div className="mt-5 flex gap-3">
+                      <div className="mt-4 flex gap-2">
                         <Stat label={t("ที่นั่งทั้งหมด", "Total Seats")} value={v.seats} />
-                        <Stat label={t("จำนวนผู้โดยสาร", "Recommended")} value={passengers} />
+                        <Stat label={t("ผู้โดยสาร", "Recommended")} value={passengers} />
                       </div>
 
-                      <div className="mt-5 flex flex-wrap gap-2">
+                      <div className="mt-4 flex flex-wrap gap-1.5">
                         {bestFor.map((b) => (
                           <span
                             key={b}
-                            className="rounded-full border border-gold/30 px-3 py-1 text-xs text-foreground/80"
+                            className="rounded-full border border-gold/30 px-2.5 py-0.5 text-[11px] text-foreground/80"
                           >
                             {b}
                           </span>
@@ -209,7 +223,7 @@ export default function Fleet() {
 
                       <a
                         href="#booking"
-                        className="mt-6 flex h-12 items-center justify-center rounded-full border border-gold/60 text-sm font-semibold uppercase tracking-widest text-gold transition duration-300 hover:bg-gold/10 active:scale-95 md:mt-auto md:pt-0"
+                        className="mt-6 flex h-11 items-center justify-center rounded-full border border-gold/60 text-xs font-semibold uppercase tracking-widest text-gold transition duration-300 hover:bg-gold hover:text-black active:scale-95 md:mt-auto"
                       >
                         {t("จองรถคันนี้", "Book This Vehicle")}
                       </a>

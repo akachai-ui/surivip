@@ -32,6 +32,7 @@ export default function BookingForm() {
   ];
 
   const vehicleOptions = [
+    { th: "Toyota Camry VIP (1-3 ท่าน)", en: "Toyota Camry VIP (1-3 Guests)" },
     { th: "Luxury SUV 7 ที่นั่ง (1-5 ท่าน)", en: "Luxury SUV (1-5 Guests)" },
     { th: "VIP Van 10 ที่นั่ง (6-9 ท่าน)", en: "VIP Van (6-9 Guests)" },
   ];
@@ -186,7 +187,7 @@ export default function BookingForm() {
                 <label className="block text-xs font-semibold uppercase tracking-wider text-gold-light mb-2">
                   2. {t("เลือกรถที่ต้องการ", "Vehicle Selection")}
                 </label>
-                <div className="grid gap-2.5 sm:grid-cols-2">
+                <div className="grid gap-2.5 sm:grid-cols-3">
                   {vehicleOptions.map((veh) => {
                     const label = lang === "th" ? veh.th : veh.en;
                     const isSelected = formData.vehicle === label;

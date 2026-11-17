@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Reveal from "@/components/Reveal";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -188,6 +188,66 @@ export default function ServiceCoverage() {
   const { lang, t } = useLanguage();
   const [activeRouteId, setActiveRouteId] = useState<string>("airport");
   const [copiedToast, setCopiedToast] = useState(false);
+  const pillRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchEndY, setTouchEndY] = useState<number | null>(null);
+
+  const currentIndex = routes.findIndex((r) => r.id === activeRouteId);
+
+  const goToNextRoute = () => {
+    const nextIndex = (currentIndex + 1) % routes.length;
+    setActiveRouteId(routes[nextIndex].id);
+  };
+
+  const goToPrevRoute = () => {
+    const prevIndex = (currentIndex - 1 + routes.length) % routes.length;
+    setActiveRouteId(routes[prevIndex].id);
+  };
+
+  // Auto-scroll active pill smoothly into center of screen
+  useEffect(() => {
+    const activeEl = pillRefs.current[activeRouteId];
+    if (activeEl) {
+      activeEl.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [activeRouteId]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEndX(null);
+    setTouchEndY(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+    setTouchEndY(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX === null || touchEndX === null) return;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY !== null && touchEndY !== null ? Math.abs(touchStartY - touchEndY) : 0;
+
+    // Trigger swipe if horizontal movement is dominant and > 35px
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > diffY) {
+      if (diffX > 0) {
+        goToNextRoute();
+      } else {
+        goToPrevRoute();
+      }
+    }
+    setTouchStartX(null);
+    setTouchEndX(null);
+    setTouchStartY(null);
+    setTouchEndY(null);
+  };
 
   const activeRoute = routes.find((r) => r.id === activeRouteId) || routes[0];
 
@@ -238,8 +298,8 @@ export default function ServiceCoverage() {
             </p>
           </div>
 
-          {/* Compact Route Pills (Horizontal Swipe) */}
-          <div className="overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
+          {/* Compact Route Pills (Horizontal Smooth Swipe & Snapping) */}
+          <div className="overflow-x-auto pb-1 scrollbar-none -mx-4 px-4 scroll-smooth snap-x snap-mandatory touch-smooth">
             <div className="flex items-center gap-1.5 min-w-max">
               {routes.map((r) => {
                 const isActive = r.id === activeRouteId;
@@ -247,11 +307,14 @@ export default function ServiceCoverage() {
                 return (
                   <button
                     key={r.id}
+                    ref={(el) => {
+                      pillRefs.current[r.id] = el;
+                    }}
                     type="button"
                     onClick={() => setActiveRouteId(r.id)}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 snap-center shrink-0 ${
                       isActive
-                        ? "border border-gold bg-gold text-black shadow-md shadow-gold/20 font-semibold"
+                        ? "border border-gold bg-gold text-black shadow-md shadow-gold/20 font-semibold scale-[1.02]"
                         : "border border-gold/20 bg-black/50 text-foreground/75 active:scale-95"
                     }`}
                   >
@@ -263,8 +326,13 @@ export default function ServiceCoverage() {
             </div>
           </div>
 
-          {/* Integrated Map & Docked Info Card Container */}
-          <div className="relative rounded-2xl border border-gold/30 bg-gradient-to-b from-[#111116] via-[#0b0b0e] to-[#060608] shadow-xl overflow-hidden flex flex-col">
+          {/* Integrated Map & Docked Info Card Container (Touch Swipeable) */}
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="relative rounded-2xl border border-gold/30 bg-gradient-to-b from-[#111116] via-[#0b0b0e] to-[#060608] shadow-xl overflow-hidden flex flex-col touch-pan-y"
+          >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:20px_20px] opacity-10" />
             
             {/* Interactive Map Canvas */}
@@ -416,38 +484,78 @@ export default function ServiceCoverage() {
 
             {/* Docked Mini Route Details Card at bottom */}
             <div className="border-t border-gold/25 bg-black/95 p-3.5 backdrop-blur-md relative z-20">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm">{activeRoute.icon}</span>
-                    <h3 className="font-display text-base font-bold text-gold-light truncate">
-                      {routeName}
-                    </h3>
+              {/* Swipe & Navigation Top Bar */}
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-gold/15 text-[11px]">
+                <button
+                  type="button"
+                  onClick={goToPrevRoute}
+                  aria-label="Previous route"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold active:scale-90 transition-transform font-bold"
+                >
+                  ‹
+                </button>
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
+                    {routes.map((r, idx) => (
+                      <span
+                        key={`dot-${r.id}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === currentIndex
+                            ? "w-4 bg-gold shadow-sm shadow-gold"
+                            : "w-1.5 bg-foreground/20"
+                        }`}
+                      />
+                    ))}
                   </div>
-                  <p className="text-[11px] text-foreground/75 truncate mt-0.5">
-                    {routeSub}
-                  </p>
+                  <span className="text-[10px] text-foreground/50 ml-1">
+                    {t("ปัด ◄ ► หรือแตะเพื่อเปลี่ยน", "Swipe ◄ ► or tap")}
+                  </span>
                 </div>
-
-                {/* Duration Badge */}
-                <span className="shrink-0 rounded-full border border-gold/40 bg-gold/15 px-2 py-0.5 text-[11px] font-semibold text-gold-light">
-                  ⏱ {routeDuration}
-                </span>
+                <button
+                  type="button"
+                  onClick={goToNextRoute}
+                  aria-label="Next route"
+                  className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/30 bg-gold/10 text-gold active:scale-90 transition-transform font-bold"
+                >
+                  ›
+                </button>
               </div>
 
-              {/* TAT Highlights strip on Mobile */}
-              <div className="mt-2 pt-2 border-t border-gold/15 flex items-center gap-1.5 overflow-x-auto scrollbar-none text-[10px]">
-                <span className="shrink-0 font-semibold text-gold flex items-center gap-0.5">
-                  <span>🇹🇭 {t("ททท. แนะนำ:", "TAT Highlights:")}</span>
-                </span>
-                {routeTat.map((spot) => (
-                  <span
-                    key={spot}
-                    className="shrink-0 rounded-md border border-gold/30 bg-gold/10 px-1.5 py-0.5 text-gold-light whitespace-nowrap"
-                  >
-                    {spot}
+              {/* Dynamic Content (Smooth Fade-in on slide) */}
+              <div key={activeRouteId} className="animate-fade-in">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">{activeRoute.icon}</span>
+                      <h3 className="font-display text-base font-bold text-gold-light truncate">
+                        {routeName}
+                      </h3>
+                    </div>
+                    <p className="text-[11px] text-foreground/75 truncate mt-0.5">
+                      {routeSub}
+                    </p>
+                  </div>
+
+                  {/* Duration Badge */}
+                  <span className="shrink-0 rounded-full border border-gold/40 bg-gold/15 px-2 py-0.5 text-[11px] font-semibold text-gold-light">
+                    ⏱ {routeDuration}
                   </span>
-                ))}
+                </div>
+
+                {/* TAT Highlights strip on Mobile */}
+                <div className="mt-2 pt-2 border-t border-gold/15 flex items-center gap-1.5 overflow-x-auto scrollbar-none scroll-smooth snap-x touch-smooth text-[10px]">
+                  <span className="shrink-0 font-semibold text-gold flex items-center gap-0.5">
+                    <span>🇹🇭 {t("ททท. แนะนำ:", "TAT Highlights:")}</span>
+                  </span>
+                  {routeTat.map((spot) => (
+                    <span
+                      key={spot}
+                      className="shrink-0 rounded-md border border-gold/30 bg-gold/10 px-1.5 py-0.5 text-gold-light whitespace-nowrap snap-start"
+                    >
+                      {spot}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               {/* Action Row */}

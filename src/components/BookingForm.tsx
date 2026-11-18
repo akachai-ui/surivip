@@ -98,19 +98,24 @@ export default function BookingForm() {
 
   const handleSendToLine = () => {
     const text = generateMessageText();
+    const encoded = encodeURIComponent(text);
+
+    // Copy to clipboard as reliable backup
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
-      showToast(
-        lang === "th"
-          ? "คัดลอกข้อมูลสรุปแล้ว! กำลังเปิด LINE เพื่อส่งแอดมิน"
-          : "Booking summary copied! Opening LINE chat..."
-      );
     }
 
-    const lineChatUrl = "https://line.me/ti/p/~kawjung27";
+    showToast(
+      lang === "th"
+        ? "กำลังเปิดแอป LINE พร้อมพิมพ์ข้อความจองให้ทันที..."
+        : "Opening LINE with your booking details ready to send..."
+    );
+
+    // Open LINE official share scheme with pre-filled text
+    const lineSendUrl = `https://line.me/R/msg/text/?${encoded}`;
     setTimeout(() => {
-      window.open(lineChatUrl, "_blank");
-    }, 400);
+      window.open(lineSendUrl, "_blank");
+    }, 300);
   };
 
   const handleSendToWhatsApp = () => {
@@ -417,8 +422,8 @@ export default function BookingForm() {
 
             <p className="mt-3.5 text-center text-xs text-foreground/50">
               {t(
-                "* ระบบจะคัดลอกข้อความสรุปและเปิดแอป LINE ทันที สามารถกดวางและส่งเพื่อยืนยันกับแอดมินได้เลยครับ",
-                "* Information is pre-formatted and automatically opens LINE / WhatsApp for instant confirmation with our team."
+                "* ระบบจะเปิดแอป LINE พร้อมพิมพ์ข้อความสรุปการจองให้ทันที สามารถกดส่งถึงแอดมินได้เลยครับ (LINE ID: kawjung27)",
+                "* LINE will open automatically with your booking summary pre-filled and ready to send. (LINE ID: kawjung27)"
               )}
             </p>
           </form>
